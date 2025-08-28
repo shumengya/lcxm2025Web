@@ -9,7 +9,7 @@ import re
 from urllib.parse import unquote
 from flask import Flask, render_template, send_from_directory, abort, request
 from markdown import markdown
-from markdown.extensions import codehilite, toc, tables, fenced_code
+from markdown.extensions import codehilite, toc, tables, fenced_code, nl2br, sane_lists, smarty, admonition
 import yaml
 from pathlib import Path
 import json
@@ -47,10 +47,12 @@ SITE_CONFIG = {
     ],
     'sidebar': {
         '/guide2023/': [
+            '如何加入实验室',
+            "灵创实验室问与答",
             '灵创新媒实验室简介',
             '灵创新媒实验室组成', 
             '灵创新媒实验室就业方向',
-            '加入实验室'
+
         ],
         '/essay/': [
             '灵创新媒实验室开展互联网产业就业实践',
@@ -86,15 +88,31 @@ def read_markdown_file(file_path):
                 'toc',
                 'tables',
                 'fenced_code',
-                'attr_list'
+                'attr_list',
+                'nl2br',
+                'sane_lists',
+                'smarty',
+                'admonition',
+                'def_list',
+                'abbr',
+                'footnotes'
             ],
             extension_configs={
                 'codehilite': {
                     'css_class': 'highlight',
-                    'use_pygments': True
+                    'use_pygments': True,
+                    'linenums': False
                 },
                 'toc': {
-                    'permalink': True
+                    'permalink': True,
+                    'permalink_class': 'header-anchor',
+                    'permalink_title': '永久链接到此标题'
+                },
+                'smarty': {
+                    'smart_angled_quotes': True,
+                    'smart_dashes': True,
+                    'smart_ellipses': True,
+                    'smart_quotes': True
                 }
             }
         )
@@ -114,6 +132,50 @@ def get_page_title(frontmatter, file_path):
     if filename == 'readme' or filename == 'index':
         return SITE_CONFIG['title']
     return filename.replace('-', ' ').replace('_', ' ').title()
+
+def parse_member_list():
+    """解析灵创名单文件"""
+    members = []
+    founder_qq = "1213014433"  # 创始人QQ号
+    founder_member = None
+    
+    try:
+        with open(DOCS_DIR / '灵创名单.txt', 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and '|' in line:
+                    parts = [part.strip() for part in line.split('|')]
+                    if len(parts) >= 2 and parts[0] and parts[1]:
+                        qq_number = parts[0]
+                        nickname = parts[1]
+                        
+                        member = {
+                            'qq': qq_number,
+                            'nickname': nickname,
+                            'avatar_url': f"http://q1.qlogo.cn/g?b=qq&nk={qq_number}&s=100"
+                        }
+                        
+                        if qq_number == founder_qq:
+                            founder_member = member
+                        else:
+                            members.append(member)
+    except Exception as e:
+        print(f"Error reading member list: {e}")
+    
+    # 将创始人放在第一位
+    if founder_member:
+        members.insert(0, founder_member)
+    
+    return members
+
+@app.route('/hall-of-fame')
+def hall_of_fame():
+    """灵创英灵殿页面"""
+    members = parse_member_list()
+    return render_template('hall_of_fame.html',
+                         config=SITE_CONFIG,
+                         title='灵创英灵殿',
+                         members=members)
 
 @app.route('/')
 def index():
@@ -175,6 +237,12 @@ def serve_page(path):
 def serve_image(filename):
     """服务图片文件"""
     return send_from_directory(IMG_DIR, filename)
+
+@app.route('/video/<path:filename>')
+def serve_video(filename):
+    """服务视频文件"""
+    video_dir = STATIC_DIR / 'video'
+    return send_from_directory(video_dir, filename)
 
 @app.route('/assets/<path:filename>')
 def serve_assets(filename):

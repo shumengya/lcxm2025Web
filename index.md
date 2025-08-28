@@ -5,10 +5,12 @@ heroText: 灵创新媒
 heroImage: /img/logo.png
 tagline: 咕咕精们的小窝
 overview: 鸽子们绝佳的交流平台，从一只幼鸽到一只成熟的鸽子，愿意交流总是能成为，一只完整的鸽子。
-videoSrc: https://file.lcxm.site/about.mp4  # 视频背景链接
-#videoSrc: /about.mp4
-# 备用演示背景（当视频无法加载时会自动使用渐变背景）
-# 如果有本地视频文件，可以放在 .vuepress/public/ 目录下，然后使用 /video.mp4 这样的路径
+# 视频背景配置 - 支持多个备用源
+videoSources:
+  - https://file.lcxm.site/about.mp4  # 主要视频源
+  - /video/about.mp4  # 本地备用视频源
+  - https://cdn.jsdelivr.net/gh/lcxm-site/assets@main/video/about.mp4  # CDN备用源
+# 备用演示背景（当所有视频无法加载时会自动使用渐变背景）
 # 支持的格式：.mp4, .webm, .ogg 等视频格式
 actions:
   - text: 了解灵创
@@ -16,7 +18,7 @@ actions:
     link: /guide2023/灵创新媒实验室简介.md
   - text: 加入灵创
     type: primary
-    link: /guide2023/加入实验室.md
+    link: /guide2023/如何加入实验室.md
 features:
   - title: 程序
     details: 通过一行一行的代码让游戏中复杂的逻辑、画面、音效组合起来，构造一个能够游玩的游戏，程序组主要学习游戏程序设计、软件开发技术等。
@@ -27,5 +29,5 @@ features:
 slogan:
   - fisrt: 你也可以来到
   - second: 咕咕精们的小窝
-# footer: 灵创新媒 | Copyright © 2018-present LCXM
+# footer: 灵创新媒 | Copyright © 2018-2025 LCXM
 ---

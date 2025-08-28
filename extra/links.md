@@ -1,5 +1,7 @@
 ## 常用外链
 
+> 以下内容已过时，仅留作纪念，请谨慎观看！
+
 ### 工作相关
 
 - 腾讯企业邮箱 - [https://exmail.qq.com](https://exmail.qq.com)

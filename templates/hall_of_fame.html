@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | {{ config.title }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h1 class="hero-title">灵创英灵殿</h1>
+                <p class="hero-tagline">致敬每一位为灵创新媒实验室贡献力量的成员，也期待新成员的加入！</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Members Section -->
+<section class="members-section py-5">
+    <div class="container">
+        <!-- Members Grid -->
+        {% if members %}
+        <div class="members-grid">
+            <div class="row g-3" id="membersContainer">
+                {% for member in members %}
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2-4 col-xl-1-5 member-item">
+                    <div class="member-card">
+                        <div class="member-avatar-container">
+                            <img src="{{ member.avatar_url }}" alt="{{ member.nickname }}" class="member-avatar" loading="lazy">
+                        </div>
+                        <div class="member-name">{{ member.nickname }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* 英灵殿专用样式 */
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 3rem 0;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .hero-tagline {
+        font-size: 1.2rem;
+        opacity: 0.95;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    
+    /* 删除了创始人特殊样式，现在所有成员使用统一样式 */
+    
+    /* 普通成员样式 */
+    .members-grid {
+        margin-top: 2rem;
+    }
+    
+    .member-card {
+        text-align: center;
+        padding: 1rem 0.5rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: white;
+        border: 2px solid transparent;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .member-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        border-color: var(--primary-color);
+    }
+    
+    .member-avatar-container {
+        flex-shrink: 0;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 50%;
+        border: 3px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+    
+    .member-avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+    
+    .member-card:hover .member-avatar-container {
+        border-color: var(--primary-color);
+        transform: scale(1.05);
+    }
+    
+    .member-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-color);
+        line-height: 1.2;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-top: 0.5rem;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-height: 2.4em;
+    }
+    
+    /* 自定义网格列 */
+    .col-xl-1-5 {
+        flex: 0 0 auto;
+        width: 12.5%; /* 8列布局 */
+    }
+    
+    .col-lg-2-4 {
+        flex: 0 0 auto;
+        width: 20%; /* 5列布局 */
+    }
+    
+    /* 动画效果已移除 */
+    
+    /* 响应式设计 */
+    @media (max-width: 1200px) {
+        .col-xl-1-5 {
+            width: 16.666667%; /* 6列布局 */
+        }
+        
+        .col-lg-2-4 {
+            width: 20%; /* 平板端5列布局 */
+        }
+    }
+    
+    @media (max-width: 992px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .founder-avatar {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .member-card {
+            height: 130px;
+        }
+        
+        .member-avatar-container {
+            width: 70px;
+            height: 70px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 2rem 0;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-tagline {
+            font-size: 1rem;
+        }
+        
+        .founder-card {
+            padding: 1.5rem;
+        }
+        
+        .founder-avatar {
+            width: 90px;
+            height: 90px;
+        }
+        
+        .member-card {
+            height: 120px;
+        }
+        
+        .member-avatar-container {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .member-name {
+            font-size: 0.8rem;
+        }
+        
+        .sparkle {
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 1.75rem;
+        }
+        
+        .hero-tagline {
+            font-size: 0.9rem;
+        }
+        
+        .founder-avatar {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .member-card {
+            padding: 0.75rem 0.25rem;
+            height: 110px;
+        }
+        
+        .member-avatar-container {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .member-name {
+            font-size: 0.75rem;
+        }
+        
+        .founder-name {
+            font-size: 1.2rem;
+        }
+        
+        .founder-badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+</style>
+
+<script>
+    // 随机打乱成员显示顺序
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('membersContainer');
+         if (container) {
+             const memberItems = Array.from(container.querySelectorAll('.member-item'));
+             
+             if (memberItems.length > 1) {
+                 // 保留第一个成员（创始人），只对其余成员进行随机排序
+                 const firstMember = memberItems[0];
+                 const otherMembers = memberItems.slice(1);
+                 
+                 // Fisher-Yates 洗牌算法
+                 function shuffleArray(array) {
+                     const shuffled = [...array];
+                     for (let i = shuffled.length - 1; i > 0; i--) {
+                         const j = Math.floor(Math.random() * (i + 1));
+                         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                     }
+                     return shuffled;
+                 }
+                 
+                 // 随机打乱其他成员顺序
+                 const shuffledOthers = shuffleArray(otherMembers);
+                 
+                 // 清空容器并重新添加：第一个成员 + 打乱后的其他成员
+                 container.innerHTML = '';
+                 container.appendChild(firstMember);
+                 shuffledOthers.forEach(member => {
+                     container.appendChild(member);
+                 });
+             }
+         }
+        
+        // 图片加载错误处理
+         const avatars = document.querySelectorAll('.member-avatar');
+         avatars.forEach(img => {
+             img.addEventListener('error', function() {
+                 // 如果头像加载失败，使用默认头像
+                 this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZjBmMGYwIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iMzUiIHI9IjE1IiBmaWxsPSIjY2NjIi8+CjxwYXRoIGQ9Ik0yMCA4MEM0MCA2MCA2MCA2MCA4MCA4MEgyMFoiIGZpbGw9IiNjY2MiLz4KPC9zdmc+';
+                 this.style.border = '3px solid #ddd';
+             });
+         });
+    });
+</script>
+{% endblock %}
